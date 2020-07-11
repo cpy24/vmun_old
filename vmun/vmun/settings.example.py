@@ -1,0 +1,1 @@
+SECRET_KEY = 'a_key_that_will_be_automatically_generated_by_django'

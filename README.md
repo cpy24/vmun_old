@@ -13,23 +13,19 @@
     <th>Content</th>
   </tr>
   <tr>
-    <td><a href="https://github.com/crimsonpython24-grade10/vmun/blob/master/CODE_OF_CONDUCT.md" target="_blank">Code of Conduct</a></td>
+    <td><a href="https://github.com/crimsonpython24/vmun/blob/master/CODE_OF_CONDUCT.md" target="_blank">Code of Conduct</a></td>
     <td>Things you should know before taking, modifying, and redistribuging code</td>
   </tr>
   <tr>
-    <td><a href="https://github.com/crimsonpython24-grade10/vmun/blob/master/LICENSE" target="_blank">License</a></td>
+    <td><a href="https://github.com/crimsonpython24/vmun/blob/master/LICENSE" target="_blank">License</a></td>
     <td>An elaborated file on which permissions are granted and which prequisites must be fulfilled</td>
   </tr>
   <tr>
-    <td><a href="https://github.com/crimsonpython24-grade10/vmun/blob/master/CONTRIBUTING.md" target="_blank">Contributing</a></td>
+    <td><a href="https://github.com/crimsonpython24/vmun/blob/master/CONTRIBUTING.md" target="_blank">Contributing</a></td>
     <td>How you can support this project without sponsoring (b/c I don't have a card)</td>
   </tr>
   <tr>
-    <td><a href="https://github.com/crimsonpython24-grade10/vmun/blob/master/CONVENTIONS.md" target="_blank">Conventions</a></td>
-    <td>Formatting guidelines for this project to help users understand the code and collaboration easier</td>
-  </tr>
-  <tr>
-    <td><a href="https://github.com/crimsonpython24-grade10/vmun/blob/master/DISCLAIMERS.md" target="_blank">Disclaimers</a></td>
+    <td><a href="https://github.com/crimsonpython24/vmun/blob/master/DISCLAIMERS.md" target="_blank">Disclaimers</a></td>
     <td>Clarifiations that an user must know before spreading this repository</td>
   </tr>
 </table>
