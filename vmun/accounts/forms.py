@@ -1,39 +1,31 @@
-from django import forms
-from django.contrib.auth import password_validation
-from django.contrib.auth.forms import UserCreationForm, UsernameField
-from django.utils.translation import gettext, gettext_lazy as _
+  
+from django.forms import ModelForm
 
 from .models import User
 
 
-class UserSignupForm(UserCreationForm):
-    gender_choices = [
-        ('male', 'Male'),
-        ('female', 'Female'),
-        ('others', 'Non-binary'),
-        ('none', 'Prefer not to say'),
-    ]
+class UpdateFormBase(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        password = self.fields.get('password')
+        if password:
+            password.help_text = password.help_text.format('../password/')
+        user_permissions = self.fields.get('user_permissions')
+        if user_permissions:
+            user_permissions.queryset = user_permissions.queryset.select_related('content_type')
 
-    first_name = forms.CharField(label=_("First name"), strip=True, max_length=75)
-    last_name = forms.CharField(label=_("Last name"), strip=True, max_length=75)
-    email = forms.EmailField(label=_("Email"))
-    birthday = forms.SplitDateTimeField(label=_("Birthday"))
-    gender = forms.ChoiceField(label=_("Choices"), choices=gender_choices)
-
-    password1 = forms.CharField(
-        label=_("Password"),
-        strip=False,
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-        help_text=password_validation.password_validators_help_text_html(),
-    )
-    password2 = forms.CharField(
-        label=_("Password confirmation"),
-        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
-        strip=False,
-        help_text=_("Enter the same password as before, for verification."),
-    )
+    def clean_password(self):
+        # Regardless of what the user provides, return the initial value.
+        # This is done here, rather than on the field, because the
+        # field does not have access to the initial value
+        return self.initial.get('password')
 
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name", "email", "birthday", "gender")
-        field_classes = {'username': UsernameField}
+        fields = '__all__'
+
+
+class LoginForm(UpdateFormBase):
+    class Meta:
+        model = User
+        fields = ('first_name', 'password')

@@ -1,14 +1,19 @@
 from django.http import JsonResponse
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.contrib.auth.views import LoginView
+# from django.contrib.auth.views import LoginView
+from django.views import View
 from django.views.generic.edit import FormView
 from django.conf import settings
 from django.utils import timezone
 from django.core import serializers
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_http_methods
 
 from .models import User
-from .forms import UserSignupForm
+from .forms import LoginForm
+from .forms_tmp import UserSignupForm
 
 
 class ContextDataMixin:
@@ -67,8 +72,30 @@ class JSONProfileView(JSONResponseMixin, DetailView):
         return self.render_to_json_response(context, **response_kwargs)
 
 
-class UserLoginView(LoginView):
+class UserLoginView(View):
+    form_class = LoginForm
+    initial = {'key': 'value'}
     template_name = 'accounts/auth/auth-login.html'
+    
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        print("posted")
+
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            print("valid")
+            if user is not None:
+                login(request, user)
+                print("logged in")
+                return redirect('index')
+                
 
 
 class UserSignupView(FormView):
