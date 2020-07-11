@@ -1,0 +1,35 @@
+{
+  "name": "vmun",
+  "version": "0.0.1",
+  "description": "Porting the MUN conference onto the web",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crimsonpython24/vmun.git"
+  },
+  "keywords": [
+    "mun",
+    "django",
+    "react",
+    "reactjs",
+    "webapp",
+    "model-united-nations"
+  ],
+  "author": "crimsonpython24",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/crimsonpython24/vmun/issues"
+  },
+  "homepage": "https://github.com/crimsonpython24/vmun#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}

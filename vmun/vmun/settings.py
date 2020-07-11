@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os, sys
 
-from config import base
+from .config import base
 from utils.misc import get_git_changeset
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -136,4 +136,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'site_static'),
 ]
 
-FILE_UPLOAD_TEMP_DIR = os.path.join(BASE_DIR, 'tmp'
+FILE_UPLOAD_TEMP_DIR = os.path.join(BASE_DIR, 'tmp')

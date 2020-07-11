@@ -134,3 +134,4 @@ config/
 # Too much stuffs
 node_modules/
 package-lock.json
+static/
