@@ -1,0 +1,1 @@
+alias delpyc='find . -name "*.pyc" -delete'
