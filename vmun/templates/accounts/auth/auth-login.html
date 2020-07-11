@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+  <div id="root"></div>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'site/accounts/auth/auth_login.js' %}"></script>
+{% endblock js %}

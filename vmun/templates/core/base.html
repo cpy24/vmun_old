@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>vmun</title>
+    <style>
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      textarea:-webkit-autofill,
+      textarea:-webkit-autofill:hover,
+      textarea:-webkit-autofill:focus,
+      select:-webkit-autofill,
+      select:-webkit-autofill:hover,
+      select:-webkit-autofill:focus {
+        -webkit-text-fill-color: rgba(0, 0, 0, 0.8);
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    </style>
+    {% block styles %}{% endblock styles %}
+  </head>
+  <body>
+    {% block content %}
+    {% endblock content %}
+  </body>
+  {% if user.is_authenticated %}
+  <script>
+    let username = "{{ username }}";
+    let user_auth = true;
+    let logout_url = "{% url 'logout' %}";
+    let index_url = "{% url 'index' %}";
+    let api_url = "{% url 'account_api' slug=user.slug %}";
+  </script>
+  {% else %}
+  <script>
+    let user_auth = false;
+    let login_url = "{% url 'login' %}";
+    let signup_url = "{% url 'signup' %}";
+    let index_url = "{% url 'index' %}";
+  </script>
+  {% endif %}
+  {% block js %}
+  {% endblock js %}
+</html>

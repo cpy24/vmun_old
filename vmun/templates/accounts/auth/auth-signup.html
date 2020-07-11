@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+  <div id="navbar"></div>
+  <div id="root"></div>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'site/accounts/auth/auth_signup.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Ldlsq0ZAAAAAE0UvGifPK_mVVfu7mFXxNJXHnzz"></script>
+  <script>
+    grecaptcha.ready(function() {
+      $('#contactform').submit(function(e){
+        var form = this;
+        e.preventDefault()
+        grecaptcha.execute('reCAPTCHA_site_key', {action: 'contactform'}).then(function(token) {
+          $('#recaptcha').val(token)
+          form.submit()
+        });
+      })
+    });
+  </script>
+{% endblock js %}

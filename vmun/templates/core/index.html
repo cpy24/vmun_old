@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+  <header>
+    <div id="navbar"></div>
+  </header>
+  <div id="root"></div>
+  <footer class="footer">
+    <div id="footer"></div>
+  </footer>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'site/core/index.js' %}"></script>
+{% endblock js %}
