@@ -20,6 +20,23 @@ function getCookie(name) {
   return cookieValue;
 }
 
+async function postData(url = '', data = {}) {
+  let csrftoken = getCookie('csrftoken');
+  const response = await fetch(url, {
+    mode: 'same-origin',
+    cache: 'no-cache',
+    credentials: 'include',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', 'X-CSRFToken': csrftoken,
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer', 
+    body: JSON.stringify(data)
+  });
+  return response.json(); 
+}
+
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -31,30 +48,17 @@ class NormalLoginForm extends React.Component {
   }
 
   handleUsernameChange(event) {
-    this.setState({username: event.target.username});
+    this.setState({username: event.target.value});
+    console.log("Username: " + event.target.password)
   }
   handlePasswordChange(event) {
-    this.setState({password: event.target.password});
+    this.setState({password: event.target.value});
+    console.log("Password: " + event.target.password)
   }
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.username);
-    alert('Password is: ' + this.state.password);
-    event.preventDefault();
 
-    let csrftoken = getCookie('csrftoken');
-
-    fetch('/account/login/', {
-      credentials: 'include',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', 'X-CSRFToken': csrftoken,
-      },
-      body: {
-        "username": this.state.username,
-        "password": this.state.password
-      }
-    })
+    postData('/account/login', this.state)
     .then((response) => {console.log('message: ', response);})
     .catch((error) => {console.error('Error:', error);});
   }
@@ -69,28 +73,30 @@ class NormalLoginForm extends React.Component {
             noValidate 
           >
             <Form.Item
-              name="username"
               rules={[
                 { required: true, message: "Please input your Username!" }
               ]}
-              onChange={this.handleUsernameChange}
             >
               <Input
+                name="username"
+                id="username"
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="Username"
+                onChange={this.handleUsernameChange}
               />
             </Form.Item>
             <Form.Item
-              name="password"
               rules={[
                 { required: true, message: "Please input your Password!" }
               ]}
-              onChange={this.handlePasswordChange}
             >
               <Input
+                name="password"
+                id="password"
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Password"
+                onChange={this.handlePasswordChange}
               />
             </Form.Item>
             <Form.Item>

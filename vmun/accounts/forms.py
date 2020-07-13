@@ -28,4 +28,4 @@ class UpdateFormBase(ModelForm):
 class LoginForm(UpdateFormBase):
     class Meta:
         model = User
-        fields = ('first_name', 'password')
+        fields = ('username', 'password')

@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import { DatePicker, message, version, Button, Alert } from "antd";
 import "antd/dist/antd.css";
 import Navbar from "../components/core/navbar";
-import Footer from "../components/core/footer";
 
 const App = () => {
   const [date, setDate] = useState(null);

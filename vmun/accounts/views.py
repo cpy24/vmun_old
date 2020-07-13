@@ -83,19 +83,20 @@ class UserLoginView(View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+        username = request.POST.get('username', 'none')
+        password = request.POST.get('password', 'none')
 
-        print("posted")
+        print(username)
+        print(password)
 
         if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
             user = authenticate(request, username=username, password=password)
             print("valid")
             if user is not None:
                 login(request, user)
                 print("logged in")
                 return redirect('index')
-                
+        return redirect('login')
 
 
 class UserSignupView(FormView):
