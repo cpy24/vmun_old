@@ -76,25 +76,26 @@ class JSONProfileView(JSONResponseMixin, DetailView):
 
 class UserLoginView(View):
     form_class = LoginForm
-    initial = {'key': 'value'}
     template_name = 'accounts/auth/auth-login.html'
     
     def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': self.form_class})
 
     def post(self, request, *args, **kwargs):
-        jsdata = json.loads(request.body)
-        username = jsdata.get('username')
-        password = jsdata.get('password')
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
 
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return JsonResponse(jsdata)
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'errors': 'user not found'})
 
-        return JsonResponse(jsdata)
-
+        return JsonResponse({'success': False, 'errors': form.errors})
+        
 
 class UserSignupView(FormView):
     form_class = UserSignupForm

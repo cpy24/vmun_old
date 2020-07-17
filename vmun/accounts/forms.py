@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from django import forms
 
 from .models import User
 
@@ -24,7 +25,10 @@ class UpdateFormBase(ModelForm):
         fields = '__all__'
 
 
-class LoginForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ('username', 'password')
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField()
+
+    # class Meta:
+    #     model = User
+    #     fields = ('username', 'password')

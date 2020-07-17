@@ -23,15 +23,20 @@ function getCookie(name) {
 async function postData(url = '', data = {}) {
   let csrftoken = getCookie('csrftoken');
 
+  const formData = new FormData();
+  formData.append('username', data.username);
+  formData.append('password', data.password);
+
   const response = await fetch(url, {
     method: 'POST',
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       // 'Content-Type': 'application/x-www-form-urlencoded',
       'X-CSRFToken': csrftoken,
     },
-    body: JSON.stringify(data)
+    // body: JSON.stringify(data)
+    body: formData
   });
   return response.json();
 }
@@ -56,7 +61,15 @@ class NormalLoginForm extends React.Component {
   handleSubmit(event) {
     event => event.preventDefault();
     postData('/account/login', this.state)
-    .then(data => {console.log(data);});  // JSON data parsed by `data.json()` call
+    .then(data => {
+      console.log(data);
+      if (data.success) {
+        alert('success!');
+        window.location = '/'
+      } else {
+        alert(data.errors);
+      }
+    });  // JSON data parsed by `data.json()` call
   }
 
   render () {
