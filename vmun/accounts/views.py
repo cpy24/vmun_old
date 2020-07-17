@@ -15,6 +15,8 @@ from .models import User
 from .forms import LoginForm
 from .forms_tmp import UserSignupForm
 
+import json
+
 
 class ContextDataMixin:
     def get_context_data(self, **kwargs):
@@ -82,21 +84,16 @@ class UserLoginView(View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        username = request.POST.get('username', 'none')
-        password = request.POST.get('password', 'none')
+        jsdata = json.loads(request.body)
+        username = jsdata.get('username')
+        password = jsdata.get('password')
 
-        print(username)
-        print(password)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return JsonResponse(jsdata)
 
-        if form.is_valid():
-            user = authenticate(request, username=username, password=password)
-            print("valid")
-            if user is not None:
-                login(request, user)
-                print("logged in")
-                return redirect('index')
-        return redirect('login')
+        return JsonResponse(jsdata)
 
 
 class UserSignupView(FormView):

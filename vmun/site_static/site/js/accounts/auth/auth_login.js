@@ -28,11 +28,12 @@ async function postData(url = '', data = {}) {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      // 'Content-Type': 'application/x-www-form-urlencoded',
       'X-CSRFToken': csrftoken,
     },
     body: JSON.stringify(data)
   });
-  return response.text();
+  return response.json();
 }
 
 class NormalLoginForm extends React.Component {
@@ -54,7 +55,7 @@ class NormalLoginForm extends React.Component {
 
   handleSubmit(event) {
     event => event.preventDefault();
-    postData('/account/login', { answer: 42 })
+    postData('/account/login', this.state)
     .then(data => {console.log(data);});  // JSON data parsed by `data.json()` call
   }
 
