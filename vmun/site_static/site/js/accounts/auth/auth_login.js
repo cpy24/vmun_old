@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox, Row, Col } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import jQuery from 'jquery';
+import Recaptcha from 'react-recaptcha';
 
 function getCookie(name) {
   var cookieValue = null;
@@ -45,11 +46,15 @@ async function postData(url = '', data = {}) {
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', password: '', remember: false};
+    this.state = {
+      username: '', password: '', remember: false, verified: false
+    };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleRememberChange = this.handleRememberChange.bind(this);
+    this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
+    this.verifyCallback = this.verifyCallback.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -62,19 +67,33 @@ class NormalLoginForm extends React.Component {
   handleRememberChange(event) {
     this.setState({remember: event.target.checked});
   }
+  recaptchaLoaded() {
+    console.log('capcha successfully loaded');
+  }
+  verifyCallback(response) {
+    if (response) {
+      this.setState({
+        verified: true
+      })
+    }
+  }
 
   handleSubmit(event) {
-    event => event.preventDefault();
-    postData('/account/login', this.state)
-    .then(data => {
-      console.log(data);
-      if (data.success) {
-        alert('success!');
-        window.location = '/'
-      } else {
-        alert(data.errors);
-      }
-    });  // JSON data parsed by `data.json()` call
+    if (this.state.verified) {
+      event => event.preventDefault();
+      postData('/account/login', this.state)
+      .then(data => {
+        console.log(data);
+        if (data.success) {
+          alert('success!');
+          window.location = '/'
+        } else {
+          alert(data.errors);
+        }
+      });  // JSON data parsed by `data.json()` call
+    } else {
+      alert("Pleasee verify that you are a human");
+    }
   }
 
   render () {
@@ -119,6 +138,12 @@ class NormalLoginForm extends React.Component {
               </Form.Item>
               <a style={{ float: "right" }} href="">Forgot password</a>
             </Form.Item>
+            <Recaptcha
+              sitekey="6LfJu7IZAAAAAHmdKfS7x_R0kNKrWHzCXNVYuJLv"
+              render="explicit"
+              onloadCallback={this.recaptchaLoaded}
+              verifyCallback={this.verifyCallback}
+            />
             <Form.Item>
               <Button type="submit" htmlType="submit" style={{ width: "100%" }}>
                 Log in
