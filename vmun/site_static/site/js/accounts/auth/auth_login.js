@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox, Row, Col, Spin } from "antd";
+import { Form, Input, Button, Checkbox, Row, Col } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import jQuery from 'jquery';
 
@@ -49,7 +49,7 @@ class NormalLoginForm extends React.Component {
     super(props);
     this.state = {
       username: '', password: '', remember: false,
-      usernameProps: {}, passwordProps: {}
+      usernameProps: {}, passwordProps: {},
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -61,11 +61,12 @@ class NormalLoginForm extends React.Component {
   handleUsernameChange(event) {
     this.setState({username: event.target.value});
     if (event.target.value == '') {
-      this.usernameProps = {
+      const unLocalState = {...this.state.usernameProps,
         hasFeedback: true, validateStatus: "warning",
-        help: "Username cannot be empty"
+        help: "Identity cannot be empty"
       }
-    } else {this.state.usernameProps = {}}
+      this.setState({usernameProps: unLocalState});
+    } else {this.setState({usernameProps: {}});}
   }
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
@@ -87,12 +88,15 @@ class NormalLoginForm extends React.Component {
     .then(data => {
       if (data.success) {window.location = '/';}
       else {
-        const userNameState = {...this.state.usernameProps,
+        const usernameState = {...this.state.usernameProps,
           hasFeedback: true, validateStatus: "error",
-          help: "Username and password do not match"
         };
-        this.setState({usernameProps: userNameState});
-        this.setState({passwordProps: userNameState});
+        const passwordState = {...this.state.passwordProps,
+          hasFeedback: true, validateStatus: "error",
+          help: "Login information do not match"
+        };
+        this.setState({usernameProps: usernameState});
+        this.setState({passwordProps: passwordState});
         console.log('updating props');
       }
     });
@@ -112,14 +116,18 @@ class NormalLoginForm extends React.Component {
               {...this.state.usernameProps}
               onChange={this.handleUsernameChange}
             >
-              <Input placeholder="Username"/>
+              <Input 
+                prefix={<UserOutlined className="site-form-item-icon"
+                style={{ paddingRight: 8}} />} placeholder="Username or email"/>
             </Form.Item>
             <Form.Item
               name="password"
               {...this.state.passwordProps}
               onChange={this.handlePasswordChange}
             >
-              <Input.Password type="password" placeholder="Password"/>
+              <Input.Password 
+                prefix={<LockOutlined className="site-form-item-icon"
+                style={{ paddingRight: 8}}/>} type="password" placeholder="Password"/>
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>

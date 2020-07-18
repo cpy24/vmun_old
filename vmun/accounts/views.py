@@ -83,14 +83,3 @@ class UserSignupView(FormView):
     form_class = UserSignupForm
     template_name = 'accounts/auth/auth-signup.html'
 
-
-# REMOVE
-from django.contrib.auth import views as auth_views
-from .forms import LoginFormTemp
-
-class LoginViewTemp(auth_views.LoginView):
-    form_class = LoginFormTemp
-    template_name = 'accounts/auth/login_tmp.html'
-
-    def __init__(self, *args, **kwargs):
-        super(LoginViewTemp, self).__init__(*args, **kwargs)
