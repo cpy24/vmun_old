@@ -1,35 +1,16 @@
 from django.http import JsonResponse
 from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
-# from django.contrib.auth.views import LoginView
 from django.views import View
 from django.views.generic.edit import FormView
-from django.conf import settings
-from django.utils import timezone
 from django.core import serializers
 from django.contrib.auth import authenticate, login
-from django.shortcuts import redirect, render
-from django.views.decorators.http import require_http_methods
+from django.shortcuts import render
 
 from .models import User
 from .forms import LoginForm
 from .forms_tmp import UserSignupForm
 
 import json
-
-
-class ContextDataMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['username'] = self.request.user.username
-        context['site_key'] = settings.RECAPTCHA_SITE_KEY
-        try:
-            context['slug'] = self.request.user.slug
-            context['user_auth'] = True
-        except AttributeError:
-            context['slug'] = ''
-            context['user_auth'] = False
-        return context
 
 
 class JSONResponseMixin:
@@ -65,8 +46,6 @@ class JSONProfileView(JSONResponseMixin, DetailView):
     template_name = 'accounts/dashboard/profile-json.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['now'] = timezone.now()
         data = serializers.serialize('json', self.get_queryset())
         return data
 
@@ -100,16 +79,3 @@ class UserLoginView(View):
 class UserSignupView(FormView):
     form_class = UserSignupForm
     template_name = 'accounts/auth/auth-signup.html'
-
-    # dedicated because of recaptcha
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['username'] = self.request.user.username
-        context['site_key'] = settings.RECAPTCHA_SITE_KEY
-        try:
-            context['slug'] = self.request.user.slug
-            context['user_auth'] = True
-        except AttributeError:
-            context['slug'] = ''
-            context['user_auth'] = False
-        return context

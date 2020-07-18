@@ -30,12 +30,7 @@ async function postData(url = '', data = {}) {
   const response = await fetch(url, {
     method: 'POST',
     credentials: 'include',
-    headers: {
-      // 'Content-Type': 'application/json',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-      'X-CSRFToken': csrftoken,
-    },
-    // body: JSON.stringify(data)
+    headers: {'X-CSRFToken': csrftoken,},
     body: formData
   });
   return response.json();
@@ -77,8 +72,7 @@ class NormalLoginForm extends React.Component {
       <Row justify="center">
         <Col span={24} style={{ maxWidth: 300, paddingTop: 100 }}>
           <Form
-            style={{ width: "100%" }}
-            onFinish={this.handleSubmit}
+            style={{ width: "100%" }} onFinish={this.handleSubmit}
             noValidate 
           >
             <Form.Item
@@ -102,8 +96,7 @@ class NormalLoginForm extends React.Component {
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="Password"
+                type="password" placeholder="Password"
               />
             </Form.Item>
             <Form.Item>
