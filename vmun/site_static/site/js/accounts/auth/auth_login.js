@@ -4,7 +4,6 @@ import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox, Row, Col } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import jQuery from 'jquery';
-import Recaptcha from 'react-recaptcha';
 
 function getCookie(name) {
   let cookieValue = null;
@@ -55,21 +54,17 @@ class NormalLoginForm extends React.Component {
   }
 
   handleSubmit(event) {
-    if (this.state.verified) {
-      event => event.preventDefault();
-      postData('/account/login', this.state)
-      .then(data => {
-        console.log(data);
-        if (data.success) {
-          alert('success!');
-          window.location = '/'
-        } else {
-          alert(data.errors);
-        }
-      });  // JSON data parsed by `data.json()` call
-    } else {
-      alert("Pleasee verify that you are a human");
-    }
+    event => event.preventDefault();
+    postData('/account/login', this.state)
+    .then(data => {
+      console.log(data);
+      if (data.success) {
+        alert('success!');
+        window.location = '/'
+      } else {
+        alert(data.errors);
+      }
+    });  // JSON data parsed by `data.json()` call
   }
 
   render () {
@@ -110,12 +105,6 @@ class NormalLoginForm extends React.Component {
               </Form.Item>
               <a style={{ float: "right" }} href="">Forgot password</a>
             </Form.Item>
-            <Recaptcha
-              sitekey="6LfJu7IZAAAAAHmdKfS7x_R0kNKrWHzCXNVYuJLv"
-              render="explicit"
-              onloadCallback={this.recaptchaLoaded}
-              verifyCallback={this.verifyCallback}
-            />
             <Form.Item>
               <Button type="submit" htmlType="submit" style={{ width: "100%" }}>
                 Log in
