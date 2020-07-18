@@ -5,8 +5,6 @@ from django.views.generic.edit import FormView
 from django.core import serializers
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.utils.decorators import method_decorator
 
 from .models import User
 from .forms import LoginForm
@@ -55,7 +53,6 @@ class JSONProfileView(JSONResponseMixin, DetailView):
         return self.render_to_json_response(context, **response_kwargs)
 
 
-@method_decorator(ensure_csrf_cookie, name='dispatch')
 class UserLoginView(View):
     form_class = LoginForm
     template_name = 'accounts/auth/auth-login.html'
@@ -68,7 +65,6 @@ class UserLoginView(View):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            remember = form.cleaned_data.get('remember')
 
             user = authenticate(request, username=username, password=password)
             if user is not None:

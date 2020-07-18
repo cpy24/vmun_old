@@ -7,11 +7,11 @@ import jQuery from 'jquery';
 import Recaptcha from 'react-recaptcha';
 
 function getCookie(name) {
-  var cookieValue = null;
+  let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = jQuery.trim(cookies[i]);
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = jQuery.trim(cookies[i]);
       if (cookie.substring(0, name.length + 1) === (name + '=')) {
           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
           break;
@@ -21,14 +21,9 @@ function getCookie(name) {
   return cookieValue;
 }
 
-var csrftoken = getCookie('csrftoken');
-const CSRFToken = () => {
-  return (
-    <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
-  );
-};
-
 async function postData(url = '', data = {}) {
+  let csrftoken = getCookie('csrftoken');
+
   const formData = new FormData();
   formData.append('username', data.username);
   formData.append('password', data.password);
@@ -36,7 +31,6 @@ async function postData(url = '', data = {}) {
   const response = await fetch(url, {
     method: 'POST',
     credentials: 'include',
-    mode: 'same-origin',
     headers: {'X-CSRFToken': csrftoken,},
     body: formData
   });
@@ -46,15 +40,10 @@ async function postData(url = '', data = {}) {
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: '', password: '', remember: false, verified: false
-    };
+    this.state = {username: '', password: ''};
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleRememberChange = this.handleRememberChange.bind(this);
-    this.recaptchaLoaded = this.recaptchaLoaded.bind(this);
-    this.verifyCallback = this.verifyCallback.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -63,19 +52,6 @@ class NormalLoginForm extends React.Component {
   }
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
-  }
-  handleRememberChange(event) {
-    this.setState({remember: event.target.checked});
-  }
-  recaptchaLoaded() {
-    console.log('capcha successfully loaded');
-  }
-  verifyCallback(response) {
-    if (response) {
-      this.setState({
-        verified: true
-      })
-    }
   }
 
   handleSubmit(event) {
@@ -104,7 +80,6 @@ class NormalLoginForm extends React.Component {
             style={{ width: "100%" }} onFinish={this.handleSubmit}
             noValidate 
           >
-            <CSRFToken />
             <Form.Item
               name="username"
               rules={[
@@ -131,10 +106,7 @@ class NormalLoginForm extends React.Component {
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox 
-                  checked={this.state.checked}
-                  onChange={this.handleRememberChange}>
-                    Remember me</Checkbox>
+                <Checkbox>Remember me</Checkbox>
               </Form.Item>
               <a style={{ float: "right" }} href="">Forgot password</a>
             </Form.Item>
