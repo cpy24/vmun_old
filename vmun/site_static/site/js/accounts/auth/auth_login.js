@@ -65,7 +65,7 @@ class NormalLoginForm extends React.Component {
         hasFeedback: true, validateStatus: "warning",
         help: "Username cannot be empty"
       }
-    } else {this.usernameProps = {}}
+    } else {this.state.usernameProps = {}}
   }
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
@@ -74,7 +74,7 @@ class NormalLoginForm extends React.Component {
         hasFeedback: true, validateStatus: "warning",
         help: "Password cannot be empty"
       }
-    } else {this.passwordProps = {}}
+    } else {this.state.passwordProps = {}}
   }
   
   handleRememberChange(event) {
@@ -87,10 +87,12 @@ class NormalLoginForm extends React.Component {
     .then(data => {
       if (data.success) {window.location = '/';}
       else {
-        this.usernameProps = this.passwordProps = {
+        const userNameState = {...this.state.usernameProps,
           hasFeedback: true, validateStatus: "error",
-          help: "Username and Password do not match"
-        }
+          help: "Username and password do not match"
+        };
+        this.setState({usernameProps: userNameState});
+        this.setState({passwordProps: userNameState});
         console.log('updating props');
       }
     });
@@ -107,14 +109,14 @@ class NormalLoginForm extends React.Component {
             <CSRFToken />
             <Form.Item
               name="username"
-              {...this.usernameProps}
+              {...this.state.usernameProps}
               onChange={this.handleUsernameChange}
             >
               <Input placeholder="Username"/>
             </Form.Item>
             <Form.Item
               name="password"
-              {...this.passwordProps}
+              {...this.state.passwordProps}
               onChange={this.handlePasswordChange}
             >
               <Input.Password type="password" placeholder="Password"/>

@@ -29,7 +29,7 @@ class Link(models.Model):
     publicity = models.BooleanField(_('publicity'), default=False)
 
     def __str__(self):
-        return self.url[:50]
+        return self.url
 
 
 class Education(models.Model):
