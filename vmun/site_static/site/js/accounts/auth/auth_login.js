@@ -20,6 +20,13 @@ function getCookie(name) {
   return cookieValue;
 }
 
+var csrftoken = getCookie('csrftoken');
+const CSRFToken = () => {
+  return (
+    <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+  );
+};
+
 async function postData(url = '', data = {}) {
   let csrftoken = getCookie('csrftoken');
 
@@ -30,6 +37,7 @@ async function postData(url = '', data = {}) {
   const response = await fetch(url, {
     method: 'POST',
     credentials: 'include',
+    mode: 'same-origin',
     headers: {'X-CSRFToken': csrftoken,},
     body: formData
   });
@@ -40,12 +48,13 @@ class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '', password: '',
+      username: '', password: '', remember: false,
       usernameProps: {}, passwordProps: {}
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleRememberChange = this.handleRememberChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -66,6 +75,10 @@ class NormalLoginForm extends React.Component {
         help: "Password cannot be empty"
       }
     } else {this.passwordProps = {}}
+  }
+  
+  handleRememberChange(event) {
+    this.setState({remember: event.target.checked});
   }
 
   handleSubmit(event) {
@@ -91,6 +104,7 @@ class NormalLoginForm extends React.Component {
             style={{ width: "100%" }} onFinish={this.handleSubmit}
             noValidate 
           >
+            <CSRFToken />
             <Form.Item
               name="username"
               {...this.usernameProps}
@@ -107,7 +121,11 @@ class NormalLoginForm extends React.Component {
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
+                <Checkbox
+                  checked={this.state.checked}
+                  onChange={this.handleRememberChange}>
+                    Remember me
+                </Checkbox>
               </Form.Item>
               <a style={{ float: "right" }} href="">Forgot password</a>
             </Form.Item>

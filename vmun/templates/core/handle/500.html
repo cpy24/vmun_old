@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block styles %}
+{% endblock styles %}
+
+{% block content %}
+  <header>
+    <div id="navbar"></div>
+  </header>
+  <div id="root"></div>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'site/core/handle/500.js' %}"></script>
+{% endblock js %}
