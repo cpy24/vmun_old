@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
+from django.shortcuts import redirect
 
 from .models import User
 from .forms import LoginForm

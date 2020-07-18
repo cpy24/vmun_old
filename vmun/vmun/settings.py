@@ -30,9 +30,9 @@ sys.path = ["", EXTERNAL_LIBS_PATH, EXTERNAL_APPS_PATH] + sys.path
 SECRET_KEY = base.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True   # view error page set true
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -127,15 +127,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# User management
-AUTH_USER_MODEL = 'accounts.User'
-AUTHENTICATION_BACKENDS = [
-    'accounts.backends.EmailBackend'
-]
-
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -154,3 +145,13 @@ FILE_UPLOAD_TEMP_DIR = os.path.join(BASE_DIR, 'tmp')
 
 # Custom user cookie settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+# Custom user management
+AUTH_USER_MODEL = 'accounts.User'
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailBackend'
+]
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
