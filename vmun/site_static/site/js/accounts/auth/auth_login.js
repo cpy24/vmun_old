@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox, Row, Col } from "antd";
+import { Form, Input, Button, Checkbox, Row, Col, Spin } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import jQuery from 'jquery';
 
@@ -39,7 +39,10 @@ async function postData(url = '', data = {}) {
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', password: ''};
+    this.state = {
+      username: '', password: '',
+      usernameProps: {}, passwordProps: {}
+    };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -48,56 +51,59 @@ class NormalLoginForm extends React.Component {
 
   handleUsernameChange(event) {
     this.setState({username: event.target.value});
+    if (event.target.value == '') {
+      this.usernameProps = {
+        hasFeedback: true, validateStatus: "warning",
+        help: "Username cannot be empty"
+      }
+    } else {this.usernameProps = {}}
   }
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
+    if (event.target.value == '') {
+      this.passwordProps = {
+        hasFeedback: true, validateStatus: "warning",
+        help: "Password cannot be empty"
+      }
+    } else {this.passwordProps = {}}
   }
 
   handleSubmit(event) {
     event => event.preventDefault();
     postData('/account/login', this.state)
     .then(data => {
-      console.log(data);
-      if (data.success) {
-        alert('success!');
-        window.location = '/'
-      } else {
-        alert(data.errors);
+      if (data.success) {window.location = '/';}
+      else {
+        this.usernameProps = this.passwordProps = {
+          hasFeedback: true, validateStatus: "error",
+          help: "Username and Password do not match"
+        }
+        console.log('updating props');
       }
-    });  // JSON data parsed by `data.json()` call
+    });
   }
 
   render () {
     return (
       <Row justify="center">
-        <Col span={24} style={{ maxWidth: 300, paddingTop: 100 }}>
+        <Col span={24} style={{ maxWidth: 315, paddingTop: 100 }}>
           <Form
             style={{ width: "100%" }} onFinish={this.handleSubmit}
             noValidate 
           >
             <Form.Item
               name="username"
-              rules={[
-                { required: true, message: "Please input your Username!" }
-              ]}
+              {...this.usernameProps}
               onChange={this.handleUsernameChange}
             >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
-              />
+              <Input placeholder="Username"/>
             </Form.Item>
             <Form.Item
               name="password"
-              rules={[
-                { required: true, message: "Please input your Password!" }
-              ]}
+              {...this.passwordProps}
               onChange={this.handlePasswordChange}
             >
-              <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password" placeholder="Password"
-              />
+              <Input.Password type="password" placeholder="Password"/>
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
