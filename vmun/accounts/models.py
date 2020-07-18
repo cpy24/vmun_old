@@ -75,7 +75,7 @@ class User(AbstractUser):
     slug = models.SlugField(unique=True)
     first_name = models.CharField(_('first name'), max_length=150, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
-    email = models.EmailField(_('email address'), blank=True)
+    email = models.EmailField(_('email address'), unique=True)
     avatar = models.ImageField(_('avatar'), blank=True, null=True)
     birthday = models.DateField(_('birthday'), blank=True, null=True)
     gender = models.CharField(_('gender'), max_length=10, choices=gender_choices, blank=True, null=True)
