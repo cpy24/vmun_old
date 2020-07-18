@@ -6,11 +6,11 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import jQuery from 'jquery';
 
 function getCookie(name) {
-  let cookieValue = null;
+  var cookieValue = null;
   if (document.cookie && document.cookie !== '') {
-    let cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      let cookie = jQuery.trim(cookies[i]);
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
       if (cookie.substring(0, name.length + 1) === (name + '=')) {
           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
           break;
@@ -20,9 +20,14 @@ function getCookie(name) {
   return cookieValue;
 }
 
-async function postData(url = '', data = {}) {
-  let csrftoken = getCookie('csrftoken');
+var csrftoken = getCookie('csrftoken');
+const CSRFToken = () => {
+  return (
+    <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+  );
+};
 
+async function postData(url = '', data = {}) {
   const formData = new FormData();
   formData.append('username', data.username);
   formData.append('password', data.password);
@@ -30,6 +35,7 @@ async function postData(url = '', data = {}) {
   const response = await fetch(url, {
     method: 'POST',
     credentials: 'include',
+    mode: 'same-origin',
     headers: {'X-CSRFToken': csrftoken,},
     body: formData
   });
@@ -39,10 +45,11 @@ async function postData(url = '', data = {}) {
 class NormalLoginForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {username: '', password: ''};
+    this.state = {username: '', password: '', remember: false};
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleRememberChange = this.handleRememberChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -51,6 +58,9 @@ class NormalLoginForm extends React.Component {
   }
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
+  }
+  handleRememberChange(event) {
+    this.setState({remember: event.target.checked});
   }
 
   handleSubmit(event) {
@@ -75,6 +85,7 @@ class NormalLoginForm extends React.Component {
             style={{ width: "100%" }} onFinish={this.handleSubmit}
             noValidate 
           >
+            <CSRFToken />
             <Form.Item
               name="username"
               rules={[
@@ -101,7 +112,10 @@ class NormalLoginForm extends React.Component {
             </Form.Item>
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
+                <Checkbox 
+                  checked={this.state.checked}
+                  onChange={this.handleRememberChange}>
+                    Remember me</Checkbox>
               </Form.Item>
               <a style={{ float: "right" }} href="">Forgot password</a>
             </Form.Item>
