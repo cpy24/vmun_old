@@ -14,29 +14,30 @@ class ProfileCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
-      isLoaded: false,
-      items: {},
+      error: null, isLoaded: false, items: {}, disp_name: "",
     };
   }
 
   componentDidMount() {
     fetch(api_url)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            items: result
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
+    .then(res => res.json())
+    .then(
+      (result) => {
+        this.setState({isLoaded: true, items: result});
+        console.log(this.state.items.first_name === "");
+        console.log(this.state.items.last_name === null);
+        console.log(this.state.items.username);
+
+        if (this.state.items.first_name === "" && this.state.items.last_name === "") {
+          this.setState({disp_name: this.state.items.username});
+        } else {
+          this.setState({disp_name: this.state.items.first_name + " " + this.state.items.last_name})
         }
-      )
+      },
+      (error) => {
+        this.setState({isLoaded: true, error});
+      }
+    )
   }
 
   render() {
@@ -84,13 +85,13 @@ class ProfileCard extends React.Component {
             <Row justify="center" style={{ marginBottom: -3 }}>
               <Col>
                 <Text strong style={{ fontSize: 17 }}>
-                  John Doe
+                  { this.state.disp_name }
                 </Text>
               </Col>
             </Row>
             <Row justify="center">
               <Col>
-                <Text style={{ color: "#a3a3a3" }}>testemailaddress12@gmail.com</Text>
+                <Text style={{ color: "#a3a3a3" }}>{ this.state.items.email }</Text>
               </Col>
             </Row>
           </Card>

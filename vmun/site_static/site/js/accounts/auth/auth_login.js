@@ -49,7 +49,7 @@ class NormalLoginForm extends React.Component {
     super(props);
     this.state = {
       username: '', password: '', remember: false,
-      usernameProps: {}, passwordProps: {},
+      usernameProps: {}, passwordProps: {}, afterFail: false
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -66,16 +66,27 @@ class NormalLoginForm extends React.Component {
         help: "Identity cannot be empty"
       }
       this.setState({usernameProps: unLocalState});
-    } else {this.setState({usernameProps: {}});}
+    } else {
+      this.setState({usernameProps: {}});
+      if (this.state.afterFail) {
+        this.setState({passwordProps: {}}); this.afterFail = false;
+      }
+    }
   }
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
     if (event.target.value == '') {
-      this.passwordProps = {
+      const pwLocalState = {...this.state.passwordProps,
         hasFeedback: true, validateStatus: "warning",
         help: "Password cannot be empty"
       }
-    } else {this.state.passwordProps = {}}
+      this.setState({passwordProps: pwLocalState});
+    } else {
+      this.setState({passwordProps: {}});
+      if (this.state.afterFail) {
+        this.setState({usernameProps: {}}); this.afterFail = false;
+      }
+    }
   }
   
   handleRememberChange(event) {
@@ -97,7 +108,7 @@ class NormalLoginForm extends React.Component {
         };
         this.setState({usernameProps: usernameState});
         this.setState({passwordProps: passwordState});
-        console.log('updating props');
+        this.setState({afterFail: true})
       }
     });
   }

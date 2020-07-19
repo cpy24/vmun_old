@@ -10,8 +10,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
 
 from .models import User
-from .forms import LoginForm
-from .forms_tmp import UserSignupForm
+from .forms import LoginForm, UserSignupForm
 
 import json
 
